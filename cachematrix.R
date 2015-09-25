@@ -3,7 +3,7 @@
 ## In addition it provides teh functions used by cachesolve to display the inversed matrix.
 ## When called upon to do so it will calculate an inversed matrix and store for future use.
 
-## cahcesolve checks to see if the inversed matrix has already been calculated.
+## cachesolve checks to see if the inversed matrix has already been calculated.
 ## If so, it returns the inversed matrix. Otherwise it calls makecacheMatrix to calculate a 
 ## new inversed matrix and displays that
 
@@ -52,9 +52,12 @@ makeCacheMatrix <- function(x = matrix()) {
 
 
 
-## Write a short comment describing this function
+## cachesolve checks to see if the inversed matrix has already been calculated.
+## If so, it returns the inversed matrix. Otherwise it calls makecacheMatrix to calculate a 
+## new inversed matrix and displays that.
 
-cacheSolve <- function(x, ...) {
+cacheSolve <- function(x, ...) 
+  {
   
         ## Return a matrix that is the inverse of 'x'
   inversematrix <- x$getinversematrix()
@@ -63,17 +66,16 @@ cacheSolve <- function(x, ...) {
         ## If yes, provide the stored inversed matrix.
         ## If not, calculate the new inversed matrix and display it while also storing it for the future.
   if (!is.null(inversematrix))
-  {
+    {
     message("The same matrix was provided, returning cached result")
-    
     return(inversematrix)
-  }
-    else
+    }
+  else
     {
       message("New matrix provided, calculating new inversed matrix")
-  
       data <- x$get()
-  inversematrix <- solve(data, ...)
-  x$makeinversematrix(inversematrix)
-  inversematrix
-}}
+      inversematrix <- solve(data, ...)
+      x$makeinversematrix(inversematrix)
+      inversematrix
+    }
+  }
