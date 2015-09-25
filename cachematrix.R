@@ -1,47 +1,54 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Overall description of functions
+## makeCacheMatrix clears teh stored inversed matrix whenever it is called.
+## In addition it provides teh functions used by cachesolve to display the inversed matrix.
+## When called upon to do so it will calculate an inversed matrix and store for future use.
 
-## use cacheSolve(makeCacheMatrix(Matrix goes here)) to run the function
+## cahcesolve checks to see if the inversed matrix has already been calculated.
+## If so, it returns the inversed matrix. Otherwise it calls makecacheMatrix to calculate a 
+## new inversed matrix and displays that
 
-## Write a short comment describing this function
+
+## use the following to make the function run correctly:
+##    Matrix<-makeCacheMatrix(Matrix goes here)
+##    cacheSolve(Matrix) to run the function
+
+
+## makeCacheMatrix will clear teh stored inversed matrix whenever it is called directly.
+## In addition it makes a functions available that can be called upon to calculate a new
+## inversed matrix or return an already stored inversed matrix.
 
 makeCacheMatrix <- function(x = matrix()) {
   
-  if (is.matrix(x)) { ## Test if teh data being supplied is a matrix. If not, exit the function gracefully with a message
-  
-    ## Clear the stored inverse matrix from the last dataset and store a copy of the new dataset
+        ## Clear the stored inverse matrix from the last dataset. This happens every time the
+        ## function is called directly.
     inversematrix <- NULL 
-    originalmatrix <-NULL
-
     
+        ## When a new matrix is supplied, replace the
+        ## earlier matrix and clear the stored inversed matrix
+    set <- function(y) 
+      {   
+        x <<- y              
+        inversematrix <<- NULL
+      }
     
-    ## When a new matrix is supplied, replace the
-    ## earlier matrix and clear the stored inversed matrix
-    set <- function(y) {   
-      x <<- y              
-      inversematrix <<- NULL
-      originalmatrix <<- x
-      print(originalmatrix)
-    }
-    
-    ## return the original matrix
+        ## return the original matrix
     get <- function() x 
     
-    ## Create the inversed matrix
+        ## Create the inversed matrix
     makeinversematrix <- function(solve) inversematrix <<- solve 
     
-    ## Return teh inversed matrix when this is called
+        ## Return teh inversed matrix when this is called
     getinversematrix <- function() inversematrix  
     
-    ## Make a list of the functions above
+        ## Make a list of the functions above.
+        ## These functions can be called without deleting the stored inversed matrix.
     list(set = set, get = get,     
          makeinversematrix = makeinversematrix,
          getinversematrix = getinversematrix)
     
-  } 
-  ## If the supplied data is not a matrix, print the message and end teh function
-  else {print("The supplied data is not a matrix. To use the function please supply it with a matrix.")}
-}
+  }
+ 
+  
 
 
 
@@ -50,23 +57,22 @@ makeCacheMatrix <- function(x = matrix()) {
 cacheSolve <- function(x, ...) {
   
         ## Return a matrix that is the inverse of 'x'
-
-  ## Go to the makecachematrix function and get the inversed matrix
-  ## If the inversed matrix is not null, print a message and show the stored inversed matrix
-  ## If the stored inversed matrix is still valid, print a message and 
-  ##    show the stored inversed matrix
-  inversematrix <- makeCacheMatrix$getinversematrix()
-  if(!is.null(inversematrix)) {
-    message("getting cached data")
-    return(inversematrix)
-  } ##else if (inversematrix=x)
-    ##{print("identical")}
+  inversematrix <- x$getinversematrix()
   
-  else
+        ## Check if the inversed matrix has already been calculated
+        ## If yes, provide the stored inversed matrix.
+        ## If not, calculate the new inversed matrix and display it while also storing it for the future.
+  if (!is.null(inversematrix))
+  {
+    message("The same matrix was provided, returning cached result")
     
+    return(inversematrix)
+  }
+    else
     {
-  ## If the stored inversed matrix is null, calculate teh inversed matrix and show it
-  data <- x$get()
+      message("New matrix provided, calculating new inversed matrix")
+  
+      data <- x$get()
   inversematrix <- solve(data, ...)
   x$makeinversematrix(inversematrix)
   inversematrix
